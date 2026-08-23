@@ -2,12 +2,12 @@ plugins {
     id 'fabric-loom' version '1.4.6'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = 'antiwurst'
-version = '1.0.0'
+version = '2.0.0'
 group = 'com.example.antiwurst'
+
+base {
+    archivesName = 'antiwurst'
+}
 
 repositories {
     maven { url "https://maven.fabricmc.net/" }
@@ -18,9 +18,26 @@ dependencies {
     mappings "net.fabricmc:yarn:1.20.1+build.10:v2"
     modImplementation "net.fabricmc:fabric-loader:0.14.22"
 
-    // Fabric API (仅客户端部分)
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.88.1+1.20.1"
 }
+
+sourceSets {
+    verification {
+        java.srcDir 'src/verification/java'
+        compileClasspath = sourceSets.main.output
+        runtimeClasspath = output + compileClasspath
+    }
+}
+
+tasks.register('verifyEvidenceAccumulator', JavaExec) {
+    group = 'verification'
+    description = 'Runs dependency-free checks for the violation evidence accumulator.'
+    dependsOn verificationClasses
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.example.antiwurst.detection.EvidenceAccumulatorVerification'
+}
+
+check.dependsOn verifyEvidenceAccumulator
 
 processResources {
     inputs.property "version", project.version

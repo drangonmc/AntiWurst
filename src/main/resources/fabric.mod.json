@@ -1,18 +1,21 @@
 {
   "schemaVersion": 1,
   "id": "antiwurst",
-  "version": "1.0.1",
-  "name": "ChromaWorldBeta",
-  "description": "检测并阻止 Wurst 外挂客户端",
-  "environment": "client",
+  "version": "${version}",
+  "name": "AntiWurst",
+  "description": "服务端强制握手、持续客户端校验与多层行为反作弊",
+  "environment": "*",
   "entrypoints": {
-    "client": [
+    "main": [
       "com.example.antiwurst.AntiWurstMod"
+    ],
+    "client": [
+      "com.example.antiwurst.client.AntiWurstClient"
     ]
   },
   "depends": {
     "fabricloader": ">=0.14.22",
-    "fabric-api-base": "*",
+    "fabric-api": "*",
     "minecraft": "1.20.1"
   }
 }
